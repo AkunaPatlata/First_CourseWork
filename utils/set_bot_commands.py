@@ -4,9 +4,10 @@ from aiogram import types
 async def set_default_commands(dp):
     await dp.bot.set_my_commands([
         types.BotCommand("start", "Запуск бота"),
-        types.BotCommand("help", "Допомога"),
-        types.BotCommand("mem", "Зроби правильний вибір:)"),
-        types.BotCommand("quiz", "Створити вікторину"),
-        types.BotCommand("testing", "Перші тести з укр мови"),
-        types.BotCommand("start_test", "Рандомні питання")
+        types.BotCommand("start_lite_ukrlit", "Спробуй себе в 10-ти тестах з літератури!"),
+        types.BotCommand("start_lite_mova", "Спробуй себе в 10-ти тестах з мови!"),
+        types.BotCommand("ukr_mova_themes", "Обери тему яку хочеш дослідити"),
+        types.BotCommand("help", "Потрібна допомога? Тицяй сюди"),
+        types.BotCommand("advices", "Тут ти зможеш знайти декілька корисних порад для якісної підготовки до ЗНО"),
+        types.BotCommand("about_nuwm", "Хочеш дізнатися що таке НУВГП?")
     ])

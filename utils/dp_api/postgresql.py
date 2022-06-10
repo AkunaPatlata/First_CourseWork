@@ -48,6 +48,35 @@ class Database:
         """
         await self.pool.execute(sql)
 
+    async def create_table_with_questions_for_nagolos(self):
+        sql = """
+        CREATE TABLE IF NOT EXISTS Questions_mova_nagolos (
+        id SERIAL,
+        question VARCHAR(255) NOT NULL,
+        first VARCHAR(255) NOT NULL,
+        second VARCHAR(255) NOT NULL,
+        third VARCHAR(255) NOT NULL,
+        fourth VARCHAR(255) NOT NULL,
+        correct INT NOT NULL
+        );
+        """
+        await self.pool.execute(sql)
+
+    async def create_table_with_questions_for_apostrof(self):
+        sql = """
+        CREATE TABLE IF NOT EXISTS Questions_mova_apostrof (
+        id SERIAL,
+        question VARCHAR(255) NOT NULL,
+        first VARCHAR(255) NOT NULL,
+        second VARCHAR(255) NOT NULL,
+        third VARCHAR(255) NOT NULL,
+        fourth VARCHAR(255) NOT NULL,
+        fifth VARCHAR(255) NOT NULL,
+        correct INT NOT NULL
+        );
+        """
+        await self.pool.execute(sql)
+
     @staticmethod
     def format_args(sql, parameters: dict):
         sql += " AND ".join([
@@ -55,14 +84,26 @@ class Database:
         ])
         return sql, tuple(parameters.values())
 
+    async def add_questions_to_mova_nagolos(self, question: str, first: str, second: str, third: str, fourth: str,
+                                            correct: int):
+        sql = """INSERT INTO Questions_mova_nagolos (question, first, second, third, fourth, correct)
+                    VALUES ($1,$2,$3,$4,$5,$6)"""
+        await self.pool.execute(sql, question, first, second, third, fourth, correct)
+
+    async def add_questions_to_mova_apostrof(self, question: str, first: str, second: str, third: str, fourth: str, fifth: str,
+                                            correct: int):
+        sql = """INSERT INTO Questions_mova_apostrof (question, first, second, third, fourth, fifth, correct)
+                    VALUES ($1,$2,$3,$4,$5,$6,$7)"""
+        await self.pool.execute(sql, question, first, second, third, fourth, fifth, correct)
+
     async def add_question_to_litra(self, question: str, first: str, second: str, third: str, fourth: str, fifth: str,
-                           correct: int):
+                                    correct: int):
         sql = """INSERT INTO Questions_litra (question, first, second, third, fourth, fifth, correct)
             VALUES ($1,$2,$3,$4,$5,$6,$7)"""
         await self.pool.execute(sql, question, first, second, third, fourth, fifth, correct)
 
     async def add_question_to_mova(self, question: str, first: str, second: str, third: str, fourth: str,
-                           correct: int):
+                                   correct: int):
         sql = """INSERT INTO Questions_mova (question, first, second, third, fourth, correct)
             VALUES ($1,$2,$3,$4,$5,$6)"""
         await self.pool.execute(sql, question, first, second, third, fourth, correct)
@@ -75,6 +116,13 @@ class Database:
         sql = "SELECT * FROM Questions_mova"
         return await self.pool.fetch(sql)
 
+    async def select_all_questions_nagolos(self):
+        sql = "SELECT * FROM Questions_mova_nagolos"
+        return await self.pool.fetch(sql)
+
+    async def select_all_questions_apostrof(self):
+        sql = "SELECT * FROM Questions_mova_apostrof"
+        return await self.pool.fetch(sql)
 
     async def delete_questions(self):
         await self.pool.execute("DELETE FROM Questions_litra WHERE True")

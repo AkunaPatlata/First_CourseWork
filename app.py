@@ -11,14 +11,13 @@ async def on_startup(dp):
         print("Створюємо таблиці...", end="")
         await db.create_table_with_questions_litra()
         await db.create_table_with_questions_mova()
+        await db.create_table_with_questions_for_nagolos()
         print("Готово")
     except Exception as e:
         print(f"\n\nError! {e}")
 
-
     print('Бот працює')
     await set_default_commands(dp)
-
 
 
 async def on_shutdown(dp):
