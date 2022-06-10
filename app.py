@@ -12,6 +12,10 @@ async def on_startup(dp):
         await db.create_table_with_questions_litra()
         await db.create_table_with_questions_mova()
         await db.create_table_with_questions_for_nagolos()
+        await db.create_table_with_questions_for_skladni()
+        await db.create_table_with_questions_for_double()
+        await db.create_table_with_questions_for_foreign()
+        await db.create_table_with_questions_for_prefiks()
         print("Готово")
     except Exception as e:
         print(f"\n\nError! {e}")

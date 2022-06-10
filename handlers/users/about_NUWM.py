@@ -7,10 +7,17 @@ from aiogram.dispatcher.filters.builtin import Command
 
 @dp.message_handler(content_types=ContentType.PHOTO)
 async def get_photo_id(message: Message):
-    await message.reply(message.photo[-1].file_id)
+    await message.reply(f'Вибач, я тебе не зрозумів, обери пункт з меню, або клікни на ось це посилання /help',
+                        reply_markup=types.ReplyKeyboardRemove())
 
 
-@dp.message_handler(Command("about_nuwm"))
+@dp.message_handler(content_types=ContentType.VIDEO)
+async def get_photo_id(message: Message):
+    await message.reply(f'Вибач, я тебе не зрозумів, обери пункт з меню, або клікни на ось це посилання /help',
+                        reply_markup=types.ReplyKeyboardRemove())
+
+
+@dp.message_handler(Command("about_nuwm"), state="*")
 async def about_NUWM(message: types.Message):
     photo_url = "https://www.education.ua/upload/i/00001815_b.jpg"
     await message.answer("Отже, ти хочеш дізнатися більше про НУВГП? Що ж, ти обрав правильний пункт в меню😄\n"

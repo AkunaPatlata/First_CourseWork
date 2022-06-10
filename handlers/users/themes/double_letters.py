@@ -1,18 +1,19 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
-from aiogram.dispatcher.filters.builtin import Command
 from aiogram.utils.callback_data import CallbackData
 import random
 from loader import dp, db
 from states.states import Test
 
-cb_get_lit_answers = CallbackData("get_lit_answers", "answer_id")
+cb_get_double_answers = CallbackData("get_double_answers", "answer_id")
 
 
-@dp.message_handler(Command('start_lite_ukrlit'), state="*")
-async def get_10_random_questions_litra(message: types.Message, state: FSMContext):
+@dp.callback_query_handler(text='double_letters', state="*")
+async def get_questions_apostrof(call: types.CallbackQuery, state: FSMContext):
+    await call.message.edit_reply_markup()
+    await call.message.edit_text("💫Ви обрали тему «Подвоєння літер»💫")
     keyboard = types.InlineKeyboardMarkup(row_width=1)
-    questions = await db.select_all_questions_litra()
+    questions = await db.select_all_questions_double()
     questions = [dict(q) for q in random.sample(questions, 10)]
     question = questions.pop(0)
     question_text = question.get("question")
@@ -23,17 +24,18 @@ async def get_10_random_questions_litra(message: types.Message, state: FSMContex
                  question.get("fourth"), question.get("fifth")]
     for index, variable in enumerate(variables, start=1):
         keyboard.add(types.InlineKeyboardButton(text=variable,
-                                                callback_data=cb_get_lit_answers.new(answer_id=index)))
+                                                callback_data=cb_get_double_answers.new(answer_id=index)))
 
-    await message.answer(f"№{10 - len(questions)}\n ⚡{question_text}⚡", reply_markup=keyboard)
+    await call.message.answer(f"№{10 - len(questions)}\n ⚡{question_text}⚡", reply_markup=keyboard)
     await state.update_data(variables=variables)
     await state.update_data(correct=correct)
     await state.update_data(questions=questions)
     await state.update_data(counter=counter)
-    await Test.Litra.set()
+    await call.answer(cache_time=60)
+    await Test.Double.set()
 
 
-@dp.callback_query_handler(cb_get_lit_answers.filter(), state=Test.Litra)
+@dp.callback_query_handler(cb_get_double_answers.filter(), state=Test.Double)
 async def get_lit_answers_call(call: types.CallbackQuery, callback_data: dict, state: FSMContext):
     data = await state.get_data()
     questions = data.get('questions')
@@ -63,7 +65,7 @@ async def get_lit_answers_call(call: types.CallbackQuery, callback_data: dict, s
                      question.get("fourth"), question.get("fifth")]
         for index, variable in enumerate(variables, start=1):
             keyboard.add(types.InlineKeyboardButton(text=variable,
-                                                    callback_data=cb_get_lit_answers.new(answer_id=index)))
+                                                    callback_data=cb_get_double_answers.new(answer_id=index)))
         await call.message.answer(f"№{10 - len(questions)}\n ⚡{question_text}⚡", reply_markup=keyboard)
         await state.update_data(variables=variables)
         await state.update_data(correct=correct)

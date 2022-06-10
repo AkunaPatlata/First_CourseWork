@@ -3,11 +3,12 @@ from aiogram.dispatcher import FSMContext
 from aiogram.utils.callback_data import CallbackData
 import random
 from loader import dp, db
+from states.states import Test
 
 cb_get_apostrof_answers = CallbackData("get_apostrof_answers", "answer_id")
 
 
-@dp.callback_query_handler(text='apostrof')
+@dp.callback_query_handler(text='apostrof', state="*")
 async def get_questions_apostrof(call: types.CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup()
     await call.message.edit_text("💫Ви обрали тему «Апостроф»💫")
@@ -31,9 +32,10 @@ async def get_questions_apostrof(call: types.CallbackQuery, state: FSMContext):
     await state.update_data(questions=questions)
     await state.update_data(counter=counter)
     await call.answer(cache_time=60)
+    await Test.Apostrof.set()
 
 
-@dp.callback_query_handler(cb_get_apostrof_answers.filter())
+@dp.callback_query_handler(cb_get_apostrof_answers.filter(), state=Test.Apostrof)
 async def get_lit_answers_call(call: types.CallbackQuery, callback_data: dict, state: FSMContext):
     data = await state.get_data()
     questions = data.get('questions')
@@ -74,6 +76,7 @@ async def get_lit_answers_call(call: types.CallbackQuery, callback_data: dict, s
             if counter == 10:
                 await call.message.answer("Це ідеальний результат! Так тримати!")
         else:
-            await call.message.answer("Шкода... Ви набрали 0 балів😔\nАле я вірю в тебе, ще трішки попрацювати і результат точно буде кращим!")
+            await call.message.answer(
+                "Шкода... Ви набрали 0 балів😔\nАле я вірю в тебе, ще трішки попрацювати і результат точно буде кращим!")
 
     await call.answer(cache_time=60)
