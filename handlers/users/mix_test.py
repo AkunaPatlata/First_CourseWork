@@ -96,5 +96,6 @@ async def get_lit_answers_call(call: types.CallbackQuery, callback_data: dict, s
         else:
             await call.message.answer(
                 "Шкода... Ви набрали 0 балів😔\nАле я вірю в тебе, ще трішки попрацювати і результат точно буде кращим!")
+        await state.finish()
 
     await call.answer(cache_time=60)
