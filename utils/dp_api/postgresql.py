@@ -232,3 +232,9 @@ class Database:
     async def delete_questions(self):
         await self.pool.execute("DELETE FROM Questions_litra WHERE True")
         await self.pool.execute("DELETE FROM Questions_mova WHERE TRUE")
+        await self.pool.execute("DELETE FROM Questions_mova_nagolos WHERE TRUE")
+        await self.pool.execute("DELETE FROM Questions_mova_prefiks WHERE TRUE")
+        await self.pool.execute("DELETE FROM Questions_mova_double WHERE TRUE")
+        await self.pool.execute("DELETE FROM Questions_mova_skladni WHERE TRUE")
+        await self.pool.execute("DELETE FROM Questions_mova_apostrof WHERE TRUE")
+        await self.pool.execute("DELETE FROM Questions_mova_foreign WHERE TRUE")
