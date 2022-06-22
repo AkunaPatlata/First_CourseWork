@@ -15,9 +15,63 @@ class Database:
             user=config.PGUSER,
             password=config.PGPASSWORD,
             host=config.IP,
-
         )
         self.pool = pool
+
+    async def create_table_with_users(self):
+        sql = """
+        CREATE TABLE IF NOT EXISTS Users (
+        id INT NOT NULL,
+        name VARCHAR(255) NOT NULL,
+        result INT,
+        PRIMARY KEY (id)
+        );
+        """
+        await self.pool.execute(sql)
+
+    @staticmethod
+    def format_args(sql, parameters: dict):
+        sql += " AND ".join([
+            f"{item} = ${num}" for num, item in enumerate(parameters, start=1)
+        ])
+        return sql, tuple(parameters.values())
+
+    async def add_user(self, id: int, name: str, result: int = 0):
+        try:
+            sql = "INSERT INTO Users (id, name, result) VALUES ($1, $2, $3)"
+            await self.pool.execute(sql, id, name, result)
+        except asyncpg.exceptions.UniqueViolationError:
+            pass
+
+    async def select_all_users(self):
+        sql = "SELECT * FROM Users"
+        return await self.pool.fetch(sql)
+
+    async def select_user(self, **kwargs):
+        sql = "SELECT * FROM Users WHERE "
+        sql, parameters = self.format_args(sql, kwargs)
+        return await self.pool.fetchrow(sql, *parameters)
+
+    async def select_specific_result(self, **kwargs):
+        sql = "SELECT result FROM Users WHERE "
+        sql, parameters = self.format_args(sql, kwargs)
+        return await self.pool.fetchrow(sql, *parameters)
+
+    async def select_all_results(self):
+        sql = "SELECT result FROM Users"
+        return await self.pool.fetch(sql)
+
+    async def update_user_result(self, result, id):
+        sql = "UPDATE Users SET result = $1 WHERE id = $2"
+        return await self.pool.execute(sql, result, id)
+
+    async def delete_users(self):
+        await self.pool.execute("DELETE FROM Users WHERE True")
+
+    async def top_10(self):
+        return await self.pool.fetch("SELECT name, result FROM Users ORDER BY result DESC LIMIT 10")
+
+
 
     async def create_table_with_questions_litra(self):
         sql = """

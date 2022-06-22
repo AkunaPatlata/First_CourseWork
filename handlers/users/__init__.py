@@ -5,6 +5,8 @@ from handlers.users.themes.skladni import dp
 from handlers.users.themes.double_letters import dp
 from handlers.users.themes.foreign import dp
 from handlers.users.themes.prefiks import dp
+from .top_10 import dp
+from .game_test import dp
 from .mix_test import dp
 from .select_theme import dp
 from .lite_ukrlit_test import dp

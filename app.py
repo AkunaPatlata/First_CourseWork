@@ -16,6 +16,7 @@ async def on_startup(dp):
         await db.create_table_with_questions_for_double()
         await db.create_table_with_questions_for_foreign()
         await db.create_table_with_questions_for_prefiks()
+        await db.create_table_with_users()
         print("Готово")
     except Exception as e:
         print(f"\n\nError! {e}")

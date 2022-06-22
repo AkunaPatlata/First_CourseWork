@@ -45,14 +45,14 @@ async def get_mova_answers_call(call: types.CallbackQuery, callback_data: dict, 
 
     if answer_id == correct:
         await call.message.answer("✅Правильна відповідь✅\n"
-                                  f"Ви обрали варіант: «{variables[answer_id-1]}»")
+                                  f"Ви обрали варіант: «{variables[answer_id - 1]}»")
         await call.message.edit_reply_markup()
         counter += 1
         await state.update_data(counter=counter)
     else:
         await call.message.answer("⛔Неправильна відповідь⛔\n"
-                                  f"Ви обрали варіант: «{variables[answer_id-1]}»\n"
-                                  f"Правильна відповідь: «{variables[correct-1]}»")
+                                  f"Ви обрали варіант: «{variables[answer_id - 1]}»\n"
+                                  f"Правильна відповідь: «{variables[correct - 1]}»")
         await call.message.edit_reply_markup()
     print(answer_id, correct)
     if questions:
