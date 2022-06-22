@@ -1,4 +1,3 @@
-import asyncpg.exceptions
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.builtin import Command
