@@ -1,10 +1,6 @@
 from aiogram import types
-from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.builtin import Command
-from aiogram.utils.callback_data import CallbackData
-import random
 from loader import dp, db
-from states.states import Test
 
 
 @dp.message_handler(Command('top_10'), state="*")
