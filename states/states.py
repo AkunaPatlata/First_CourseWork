@@ -11,3 +11,4 @@ class Test(StatesGroup):
     Foreign = State()
     Double = State()
     Apostrof = State()
+    Game = State()

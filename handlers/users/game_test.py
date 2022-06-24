@@ -54,10 +54,10 @@ async def get_questions_for_game(message: types.Message, state: FSMContext):
     await state.update_data(counter_for_false=counter_for_false)
     await state.update_data(max_res=max_res)
     await state.update_data(name=name)
-    await Test.Mix.set()
+    await Test.Game.set()
 
 
-@dp.callback_query_handler(cb_get_game_answers.filter(), state=Test.Mix)
+@dp.callback_query_handler(cb_get_game_answers.filter(), state=Test.Game)
 async def get_lit_answers_call(call: types.CallbackQuery, callback_data: dict, state: FSMContext):
     data = await state.get_data()
     counter_for_false = data.get('counter_for_false')
